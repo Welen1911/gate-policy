@@ -39,4 +39,12 @@ Route::get('/login/{id}', [AccountController::class, 'login']);
 
 Route::get('/logout/{id}', [AccountController::class, 'logout']);
 
+Route::get('/account/edit/{id}', [AccountController::class, 'edit' ])->name('account.edit');
+
+Route::patch('/account/edit/{id}', [AccountController::class, 'update' ])->name('account.update');
+
+Route::delete('/account/delete/{id}', [AccountController::class, 'destroy' ])->name('account.destroy');
+
+
+
 require __DIR__.'/auth.php';

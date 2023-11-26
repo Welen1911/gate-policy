@@ -14,7 +14,7 @@ class AccountController extends Controller
     public function index(string $id)
     {
         if (Gate::denies('user-type')) {
-            return view('/');
+            return redirect('/');
         }
 
         $users = User::all();
@@ -51,7 +51,17 @@ class AccountController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        if (Gate::denies('user-type')) {
+            return redirect('dashboard');
+        }
+
+        $user = User::find($id);
+
+        if (Gate::denies('adminIsId', $user)) {
+            return redirect('dashboard');
+        }
+
+        return view('account.edit', compact('user'));
     }
 
     /**
@@ -59,7 +69,23 @@ class AccountController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        if (Gate::denies('user-type')) {
+            return redirect('dashboard');
+        }
+
+        $user = User::find($id);
+
+        if (Gate::denies('adminIsId', $user)) {
+            return redirect('dashboard');
+        }
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'type_account' => $request->type_account,
+        ]);
+
+        return redirect()->route('user.index', auth()->user()->id);
     }
 
     /**
@@ -67,7 +93,19 @@ class AccountController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        if (Gate::denies('user-type')) {
+            return redirect('dashboard');
+        }
+
+        $user = User::find($id);
+
+        if (Gate::denies('adminIsId', $user)) {
+            return redirect('dashboard');
+        }
+
+        $user->delete();
+
+        return redirect()->route('user.index', auth()->user()->id);
     }
 
     public function login(string $id)

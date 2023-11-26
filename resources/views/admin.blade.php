@@ -13,6 +13,7 @@
                         <table class="table-auto">
                             <thead>
                                 <tr>
+                                    <th>Id</th>
                                     <th>Name</th>
                                     <th>E-mail</th>
                                     <th>Type</th>
@@ -22,16 +23,15 @@
                             @foreach ($users as $user)
                                 <tbody>
                                     <tr>
+                                        <td>{{ $user->id }}</td>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->type_account }}</td>
                                         <td>
                                             @if ($user->type_account == 'normal')
-                                                <a href="">Edit</a>
-                                                <a href="">Delete</a>
+                                                <a href="{{ route('account.edit', $user->id) }}">Edit</a>
                                             @endif
                                         </td>
-
                                     </tr>
                                 </tbody>
                             @endforeach

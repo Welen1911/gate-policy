@@ -28,5 +28,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('user-type', function (User $user) {
             return auth()->user()->type_account == 'admin';
         });
+
+        Gate::define('adminIsId', function (User $user, User $userEdit) {
+            return ($userEdit->type_account != 'admin');
+        });
     }
 }
