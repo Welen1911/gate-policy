@@ -14,9 +14,12 @@ class AccountController extends Controller
     public function index(string $id)
     {
         if (Gate::denies('user-type')) {
-            return view('normal');
+            return view('/');
         }
-        return view('admin');
+
+        $users = User::all();
+
+        return view('admin', compact('users'));
     }
 
     /**

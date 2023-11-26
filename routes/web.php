@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,14 +19,24 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/account/{id}', [AccountController::class, 'index'])->middleware('auth')->name('user.index');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::get('/account/{id}', [AccountController::class, 'index'])->name('user.index');
 
 Route::get('/normal/{id}', [AccountController::class, 'normal'])->name('user.normal');
 
-Route::get('/admin/{id}', [AccountController::class, 'admin'])->name('user.admin');
+Route::get('/admin/{id}', [AccountController::class, 'index'])->name('user.admin');
 
 Route::get('/login/{id}', [AccountController::class, 'login']);
 
 Route::get('/logout/{id}', [AccountController::class, 'logout']);
 
+require __DIR__.'/auth.php';
